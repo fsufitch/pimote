@@ -8,7 +8,7 @@ const isProduction = process.env.NODE_ENV == "production";
 const stylesHandler = MiniCssExtractPlugin.loader;
 
 const config = {
-  entry: "./pimote/index.ts",
+  entry: "./pimote/index.tsx",
   output: {
     path: path.resolve(__dirname, "dist"),
   },
