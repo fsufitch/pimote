@@ -5,7 +5,6 @@ all: deps build_all
 WEBPACK_MODE := development
 
 TARGETS := dist/*
-SOURCES := $(shell find $$(ls --ignore dist --ignore node_modules --ignore '.*') -type f)
 
 ########## ACTUAL FILE TARGETS ##########
 
@@ -31,7 +30,7 @@ build_all: protos build
 watch: protos
 	@echo === Webpack Watch
 	@echo = Mode: ${WEBPACK_MODE}
-	@echo = NOTE: Watch must be restarted if ${ROOT}/protos/* changes
+	@echo = NOTE: Watch must be restarted if protobuf sources change
 	npx webpack --mode ${WEBPACK_MODE} --watch
 
 .PHONY: protos

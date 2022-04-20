@@ -1,2 +1,14 @@
-.vscode/
-bin/
+.dockerignore
+.git
+.vscode
+LICENSE
+README.md
+Dockerfile
+
+# XXX: without DOCKER_BUILDKIT=1, docker does not read .dockerignore in subdirs
+#      so all this cruft needs to be here instead of in the appropriate subdir
+server/bin
+server/protos/**/*.pb.go
+web/dist
+web/node_modules
+web/pimote/protos/**/*.ts

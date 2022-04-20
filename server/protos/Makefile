@@ -1,7 +1,17 @@
 .PHONY: all
 all: build
 
-ROOT := $(shell echo $$(while [ ! -d .git ]; do cd ..; done; pwd))
+define PROTOS_SRC_DIR 
+$(shell echo $$( \
+	while [ ! -d protos_src ]; do \
+		cd ..; \
+		if [ $$(pwd) = '/' ]; then \
+			echo 'protos_src not found' > /dev/stderr; \
+			exit 1; \
+		fi; \
+	done; \
+	pwd)/protos_src)
+endef
 
 GOARCH := $(shell go env GOARCH)
 GOOS := $(shell go env GOOS)
@@ -12,11 +22,11 @@ GOOS := $(shell go env GOOS)
 #   $ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 PATH := $(shell echo $$PATH:$$(go env GOPATH)/bin)
 
-*.pb.go: ${ROOT}/protos/*.proto
+*.pb.go: ${PROTOS_SRC_DIR}/*.proto
 	protoc --go_out=. --go_opt=paths=source_relative \
 			--go-grpc_out=. --go-grpc_opt=paths=source_relative \
-			-I ${ROOT}/protos \
-			${ROOT}/protos/*.proto
+			-I ${PROTOS_SRC_DIR} \
+			${PROTOS_SRC_DIR}/*.proto
 
 .PHONY: clean
 clean:

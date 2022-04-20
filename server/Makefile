@@ -3,14 +3,14 @@ all: deps protos build
 GOARCH := $(shell go env GOARCH)
 GOOS := $(shell go env GOOS)
 
-BINFILE := bin/pimote_${GOOS}_${GOARCH}
-SOURCES := $(shell find . -type f)
+BINFILE := pimote_${GOOS}_${GOARCH}
+SOURCES := $(shell find $$(ls --ignore bin) -type f)
 
 ########## ACTUAL FILE TARGETS ##########
 
-${BINFILE}: ${SOURCES}
+bin/${BINFILE}: ${SOURCES}
 	@echo === Build: $@
-	go build -o ${BINFILE} ./cmd/pimote
+	go build -o bin/${BINFILE} ./cmd/pimote
 
 ########## PHONY TARGETS ##########
 
@@ -20,7 +20,7 @@ deps: go.mod go.sum
 	go mod download -x
 
 .PHONY: build
-build: ${BINFILE}
+build: bin/${BINFILE}
 
 .PHONY: protos
 protos:
@@ -28,5 +28,5 @@ protos:
 
 .PHONY: clean
 clean:
-	rm -rf ${BINFILE}
+	rm -rf bin
 	make -C protos clean
