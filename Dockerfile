@@ -40,9 +40,13 @@ RUN make -C web deps && rm -rf web
 # ===== Pre-built "distributable" target; dist_builder builds the stuff, the scratch image contains it
 FROM dev_environment AS dist_builder
 
-# --- Build stuff
 WORKDIR /pimote
 COPY . .
+
+# Reinstall npm deps from cache
+RUN make -C web deps
+
+# Run the make
 ARG MAKE_ARGS
 RUN make BINFILE=pimote ${MAKE_ARGS}
 WORKDIR /pimote/dist

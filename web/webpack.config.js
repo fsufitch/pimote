@@ -2,6 +2,7 @@
 
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV == "production";
 
@@ -45,6 +46,11 @@ const config = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, "pimote", "index.html"),
+    }),
+  ],
 };
 
 module.exports = () => {

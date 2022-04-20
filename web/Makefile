@@ -1,30 +1,31 @@
 .PHONY: all
-all: deps build_all
-	@echo === NOTE: To avoid the dependency refresh, run \`make build_all\`
+all: protos build
 
 WEBPACK_MODE := development
 
-TARGETS := dist/*
+TARGETS := dist/index.html dist/main.js
+SOURCES := $(shell find $$(ls --ignore dist --ignore node_modules --ignore .gitignore --ignore Makefile --ignore README.md) -type f)
 
 ########## ACTUAL FILE TARGETS ##########
 
-${TARGETS}: ${SOURCES}
-	@echo === Build: $@
-	@echo = WEBPACK_MODE=${WEBPACK_MODE}
+${TARGETS}&: ${SOURCES}
+	# === Build: $@
+	# WEBPACK_MODE=${WEBPACK_MODE}
 	npx webpack --mode ${WEBPACK_MODE}
+	@# XXX: required due to https://github.com/webpack/webpack-dev-middleware/issues/861
+	touch ${TARGETS} 
+
+node_modules package-lock.json: package.json
+	# === Install dependencies
+	npm install
 
 ########## PHONY TARGETS ##########
 
 .PHONY: deps
-deps: package.json package-lock.json
-	@echo === Refresh node_modules
-	npm install
+deps: package-lock.json node_modules
 
 .PHONY: build
 build: ${TARGETS}
-
-.PHONY: build_all
-build_all: protos build
 
 .PHONY: watch
 watch: protos
@@ -40,4 +41,4 @@ protos:
 .PHONY: clean
 clean:
 	rm -rf ${TARGETS}
-	make -C protos clean
+	make -C pimote/protos clean

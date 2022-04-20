@@ -18,7 +18,5 @@ run: server web
 
 .PHONY: watch
 watch: server
-	parallel \:\:\: \
-		'make -C web watch' \
-		'server/bin/pimote_${GOOS}_${GOARCH} web/dist'
+	parallel -u ::: 'make -C web watch' 'server/bin/pimote_${GOOS}_${GOARCH} web/dist'
 	
