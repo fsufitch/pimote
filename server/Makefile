@@ -25,7 +25,7 @@ build: ${BINFILE}
 .PHONY: protos
 protos:
 	make -C protos
-	
+
 .PHONY: clean
 clean:
 	rm -rf ${BINFILE}

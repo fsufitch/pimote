@@ -15,3 +15,10 @@ web:
 .PHONY: run
 run: server web
 	server/bin/pimote_${GOOS}_${GOARCH} web/dist
+
+.PHONY: watch
+watch: server
+	parallel \:\:\: \
+		'make -C web watch' \
+		'server/bin/pimote_${GOOS}_${GOARCH} web/dist'
+	
